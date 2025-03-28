@@ -8,7 +8,7 @@ const AuthLayout = () => {
                 </h1>
             </div>
             
-            <div className="w-full border border-red-500 flex justify-center items-center">
+            <div className="w-full flex justify-center items-center">
             <Outlet />
             </div>
         </div>
