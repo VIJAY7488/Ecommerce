@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { PORT, URI } = require('./config');
+const authRouter = require('./routes/auhtRoutes');
 
 
 
@@ -26,6 +27,8 @@ app.use(cors({
     ],
     credentials: true
 }));
+
+app.use('/api/v1', authRouter);
 
 
 app.listen(PORT, () => {

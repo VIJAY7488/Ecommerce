@@ -25,7 +25,7 @@ const Login = () => {
             <p className="text-gray-500">
               Don't have an account?{" "}
               <Link
-                to="/register"
+                to="/auth/register"
                 onClick={() => scrollTo({top: 0, behavior: 'smooth'})}
                 className="text-[hsl(210,100%,50%)] hover:underline font-medium"
               >
