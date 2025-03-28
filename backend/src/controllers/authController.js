@@ -1,6 +1,7 @@
 const User = require("../models/userModels");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = require("../config");
 
 //Account register
 const userRegister = async(req, res) => {

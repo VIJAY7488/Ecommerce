@@ -4,6 +4,9 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Eye, EyeOff } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { userRegister } from "@/store/auth-slice";
+import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +17,8 @@ const RegisterForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -29,7 +34,8 @@ const RegisterForm = () => {
     setIsLoading(true);
 
     try {
-      console.log(formData);
+      dispatch(userRegister(formData)).unwrap();
+      navigate('/auth/login')
     } catch (error) {
       console.log(error);
     } finally {
