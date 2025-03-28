@@ -23,6 +23,7 @@
     "react-router-dom": "^7.4.0",
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.0.17",
+    "tailwindcss-animate": "^1.0.7",
     "tw-animate-css": "^1.2.4"
   },
   "devDependencies": {
