@@ -3,10 +3,11 @@ import { Card, CardContent } from "../ui/card";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { userRegister } from "@/store/auth-slice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -28,14 +29,23 @@ const RegisterForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
 
     setIsLoading(true);
 
     try {
-      dispatch(userRegister(formData)).unwrap();
-      navigate('/auth/login')
+     const data = await dispatch(userRegister(formData));
+      if(data?.payload?.success){
+        navigate('/auth/login');
+        setFormData({ fullName: "", email: "", password: "" });
+        toast.success(data?.payload?.message)
+      }
+      
+      if(!data?.payload?.success){
+        toast.error(data?.payload?.message );
+      }
+
     } catch (error) {
       console.log(error);
     } finally {
@@ -106,7 +116,7 @@ const RegisterForm = () => {
             disabled={isLoading}
             className="w-full h-12 mt-6"
           >
-            {isLoading ? <CircularProgress size={24} /> : "Create Account"}
+            {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Create Account"}
           </Button>
         </form>
       </CardContent>

@@ -46,13 +46,32 @@ const userLogin = async(req, res) => {
     const {email, password} = req.body;
 
     try {
-        const user = await User.findById(req.body.id);
+        const user = await User.findOne({email});
 
         if(!user){
             return res.status(404).json({
                 success: false, message: "User not found"
             })
         };
+
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        if(!isPasswordMatch){
+            return res.status(400).json({success: false, message: "Incorrect password. try again"})
+        };
+
+        const token = jwt.sign({id: user._id, role: user.role }, JWT_SECRET, {expiresIn: '1d'});
+
+        res.cookie('token', token, {
+            httpOnly: true, 
+            secure: true,
+            sameSite: 'Strict',
+            maxAge: 24 * 60 * 60 * 1000,
+        });
+    
+        res.status(200).json({
+            success: true,
+            message: 'Login Successfully.'
+        });
 
     } catch (error) {
         
