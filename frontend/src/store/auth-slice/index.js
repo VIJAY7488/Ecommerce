@@ -16,7 +16,18 @@ export const userRegister = createAsyncThunk('/auth/register',
 
         return response.data;
     }
-)
+);
+
+export const userLogin = createAsyncThunk('/auth/login',
+    
+    async(formData) => {
+        const response = await axios.post('http://localhost:4000/api/v1/auth/login', formData, {
+            withCredentials: true
+        });
+
+        return response.data;
+    }
+);
 
 const authSlice = createSlice({
     name: "auth",
@@ -28,12 +39,25 @@ const authSlice = createSlice({
         builder.addCase(userRegister.pending, (state) => {
             state.isLoading = true
         })
-        .addCase(userRegister.fulfilled, (state, action) => {
+        .addCase(userRegister.fulfilled, (state) => {
             state.isLoading = false,
-            state.user = action.payload,
+            state.user = null,
             state.isAuthenticated = false
         })
         .addCase(userRegister.rejected, (state) => {
+            state.isLoading = false,
+            state.user = null,
+            state.isAuthenticated = false
+        })
+        .addCase(userLogin.pending, (state) => {
+            state.isLoading = true
+        })
+        .addCase(userLogin.fulfilled, (state, action) => {
+            state.isLoading = false,
+            state.user = action.payload,
+            state.isAuthenticated = true
+        })
+        .addCase(userLogin.rejected, (state) => {
             state.isLoading = false,
             state.user = null,
             state.isAuthenticated = false

@@ -4,6 +4,10 @@ import { Eye, EyeOff } from 'lucide-react';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import { useDispatch } from 'react-redux';
+import { data, useNavigate } from 'react-router-dom';
+import { userLogin } from '@/store/auth-slice';
+import { toast } from 'react-toastify';
 
 const LoginForm = () => {
  
@@ -14,6 +18,9 @@ const LoginForm = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const handleChange = (e) => {
         const {name, value} = e.target;
 
@@ -23,13 +30,19 @@ const LoginForm = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
 
         setIsLoading(true);
 
         try {
-            console.log(formData);
+            const data = await dispatch(userLogin(formData));
+
+            if(data?.payload?.success){
+                navigate('/');
+                setFormData({email: "", password: ""});
+                toast.success(data?.payload?.message)
+            }
         } catch (error) {
            console.log(error); 
         }finally{
